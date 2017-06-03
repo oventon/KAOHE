@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>todoList</title>
+  <link rel="stylesheet/less" type="text/css" href="">
+<style type="text/css">
+  div,ul,li,p,h1,header,body{
+    padding: 0px;
+    margin: 0px;
+  }
+  body{
+    background-color: rgb(205,205,205) ;
+  }
+  header{
+    width: 100%;
+    height: 50px;
+    background-color: rgb(50,50,50);
+  }
+  .main{
+    margin: 0 auto;
+    width: 600px;
+    overflow: hidden;
+  }
+  .main span.todolist{
+    font-size: 30px;
+    color: white;
+  }
+  .main input{
+    height: 30px;
+    width: 200px;
+    font-size: 20px;
+    margin-left: 100px; 
+    border-radius: 10px;
+  }
+  ul{
+    list-style: none;
+  }
+  section {
+    margin: 40px;
+    overflow: hidden;
+  }
+  .main h1{
+    display: inline-block;
+    float: left;
+  }
+  .main span.num1{
+    float: right;
+    font-size: 20px;
+  }
+  .main span.num2{
+    float: right;
+    font-size: 20px;  
+  }
+  li{
+    background-color: #fff;
+    width: 600px;
+    height: 30px;
+    margin: 5px;
+  }
+  .clickFinish{
+    float: left;
+    width: 20px;
+    height: 20px;
+    background-color: rgb(222,222,222);
+    margin: 5px 0 0 20px;
+    cursor: pointer;
+  }
+  .del {
+    float: right;
+    width: 20px;
+    height: 20px;
+    background-color: rgb(222,222,222);
+    cursor: pointer;
+    margin: 5px 20px 0 0;
+  } 
+  .main ul {
+    float: left;
+  }
+  .main ul span {
+    line-height: 30px;
+    margin-left: 20px ;
+  }
+  .gsw li{
+    background-color: rgb(180,180,180);
+  }
+</style>
+</head>
+<body>
+  <header>
+    <div class="main">
+    <span class="todolist">TODOLIST</span>
+    <input type="text" class="add">
+    </div>
+  </header>
+  <section>
+    <div class="main">
+      <h1>正在进行</h1><span class="num1"></span>
+      <ul class="okc">
+      </ul>
+    </div>
+  </section>
+  <section>
+    <div class="main">
+      <h1>已完成</h1><span class="num2"></span>
+      <ul class="gsw">
+
+      </ul>
+    </div>
+  </section>
+
+  <!-- <button style="width:200px;height:100px;" onclick="clear()">清除</button> -->
+</body>
+</html>
+<script type="text/javascript">
+
+
+var add = document.querySelector('.add');
+var okc = document.querySelector('.okc');
+var gsw = document.querySelector('.gsw');
+var num1 = document.querySelector('.num1');
+var num2 = document.querySelector('.num2');
+var len = okc.querySelectorAll('li').length;
+var length = gsw.querySelectorAll('li').length;
+
+add.onkeydown = function(e) {
+  var e = e || window.event;
+  var val = add.value;
+  if(add.value != '' && add.value != ' '){
+    if(e.keyCode == 13){
+      createThing(okc,val,num1);
+      len++;
+      add.value = '';
+    }
+  }
+  num1.innerHTML = len; 
+  }
+
+
+
+
+
+function createThing(dom,val,n) {
+  var x = 1;
+  var clickFinish = document.createElement('div');
+  var li = document.createElement('li');
+  var span = document.createElement('span');
+  var del = document.createElement('div');
+  clickFinish.className = 'clickFinish';
+  function again(span) {
+    span.addEventListener('click',function() {
+    var inputs = document.createElement('input');
+    inputs.type = 'text';
+    this.parentNode.replaceChild(inputs,this);
+    inputs.onkeydown = function(e) {
+      var e = e || window.event;
+      var valu = inputs.value;
+      if(valu != '' && valu != ' '){
+        if(e.keyCode == 13){
+          var spans = document.createElement('span');
+          spans.innerHTML = valu;
+          val = valu;
+          this.parentNode.replaceChild(spans,this);
+          again(spans);
+        }
+      }
+    }
+  })
+  }
+  again(span);
+  span.className = 'val';
+  span.innerHTML = val;
+  del.className = 'del';
+  li.appendChild(clickFinish);
+  li.appendChild(span);
+  li.appendChild(del);
+  dom.appendChild(li);
+  del.addEventListener('click',function() {
+    this.parentNode.parentNode.removeChild(this.parentNode);
+    len--;
+    n.innerHTML = len;
+  });
+  clickFinish.addEventListener('click',function() {
+    this.parentNode.parentNode.removeChild(this.parentNode);
+    len--;
+    n.innerHTML = len;
+    length++;
+    num2.innerHTML = length;
+    var x = 1;
+    var clickFinish = document.createElement('div');
+    var li = document.createElement('li');
+    var span = document.createElement('span');
+    var del = document.createElement('div');
+    clickFinish.className = 'clickFinish';
+    span.className = 'val';
+    span.innerHTML = val;
+    del.className = 'del';
+    li.appendChild(clickFinish);
+    li.appendChild(span);
+    li.appendChild(del);
+    again(span);
+    gsw.appendChild(li);
+    del.addEventListener('click',function() {
+      this.parentNode.parentNode.removeChild(this.parentNode);
+      length--;
+      num2.innerHTML = length;
+    })
+    clickFinish.onclick = function() {
+      this.parentNode.parentNode.removeChild(this.parentNode);
+      length--;
+      num2.innerHTML = length;
+      len++;
+      num1.innerHTML = len;
+      createThing(okc,val,num1);
+    }
+  })
+}
+
+</script>
+
